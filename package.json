@@ -1,0 +1,10 @@
+{
+	"name": "jsonml",
+	"version": "1.0.0",
+	"description": "**jsonml** is a library for creating DOM nodes using JsonML, the JSON Markup Language.",
+	"main": "index.js",
+	"keywords": [],
+	"author": "Kangming Deng",
+	"license": "ISC",
+	"types": "./index.d.ts"
+}
