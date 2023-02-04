@@ -22,6 +22,11 @@
  */
 declare module 'jsonml' {
 	/**
+	 * Global symbol for "JsonML" used for metadata.
+	 */
+	export const JsonMLSymbol = Symbol.for('JsonML');
+
+	/**
 	 * HTML namespace URI. When creating an {@link HTMLElement},
 	 * passing this value to the `xmlns` parameter in {@link createNode} or {@link createElement} is optional.
 	 */
@@ -241,12 +246,19 @@ declare module 'jsonml' {
 	 * Creates a {@link Comment} node from its JsonML representation, corresponds to {@link document.createDocumentFragment}.
 	 * @see {@link JsonMLDocumentFragment}
 	 */
-	export function createDocumentFragment(jsonml: JsonMLDocumentFragment): DocumentFragment;
+	export function createDocumentFragment(jsonml: JsonMLDocumentFragment, xmlns?: typeof htmlns): DocumentFragment;
+	export function createDocumentFragment(jsonml: JsonMLDocumentFragment, xmlns?: typeof svgns): DocumentFragment;
+	export function createDocumentFragment(jsonml: JsonMLDocumentFragment, xmlns?: string): DocumentFragment;
+
+	/**
+	 * @see {@link JsonMLDocumentFragment}
+	 */
+	export function isDocumentFragment(jsonml: unknown): jsonml is JsonMLDocumentFragment;
 
 	/**
 	 * @see {@link JsonMLNamedNodeMap}
 	 */
-	export function isNamedNodeMap(jsonml: unknown): jsonml is NamedNodeMap;
+	export function isNamedNodeMap(jsonml: unknown): jsonml is JsonMLNamedNodeMap;
 
 	/**
 	 * Corresponds to {@link Node.nodeName}.

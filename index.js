@@ -1,3 +1,4 @@
+export const JsonMLSymbol = Symbol.for('JsonML');
 export const htmlns = 'http://www.w3.org/1999/xhtml';
 export const svgns = 'http://www.w3.org/2000/svg';
 export const $fragment = '#document-fragment';
@@ -8,7 +9,7 @@ export function createNode(jsonml, xmlns) {
 	if (Array.isArray(jsonml)) {
 		switch (jsonml[0]) {
 			case $fragment:
-				return createDocumentFragment(jsonml);
+				return createDocumentFragment(jsonml, xmlns);
 			case $comment:
 				return createComment(jsonml);
 			default:
@@ -37,9 +38,11 @@ export function createElement(jsonml, xmlns = htmlns) {
 			if (typeof key === 'string') {
 				switch (typeof value) {
 					case 'string':
+						element.setAttribute(key, value);
+						break;
 					case 'number':
 					case 'bigint':
-						element.setAttribute(key, value);
+						element.setAttribute(key, String(value));
 						break;
 					case 'boolean':
 						element.toggleAttribute(key, value);
@@ -60,26 +63,17 @@ export function createElement(jsonml, xmlns = htmlns) {
 export const createTextNode = jsonml => document.createTextNode(nodeValueOf(jsonml));
 export const createComment = jsonml => document.createComment(nodeValueOf(jsonml[1]));
 
-export function createDocumentFragment(jsonml) {
+export function createDocumentFragment(jsonml, xmlns) {
 	const fragment = document.createDocumentFragment();
 	for (let i = 1; i < jsonml.length;) {
-		fragment.append(createNode(jsonml[i++]));
+		fragment.append(createNode(jsonml[i++], xmlns));
 	}
 	return fragment;
 }
 
-export function isNamedNodeMap(jsonml) {
-	return jsonml && typeof jsonml === 'object' && !Array.isArray(jsonml);
-}
-
-export function nodeNameOf(jsonml) {
-	if (Array.isArray(jsonml)) {
-		return jsonml[0];
-	}
-	else {
-		return $text;
-	}
-}
+export const isDocumentFragment = jsonml => Array.isArray(jsonml) && jsonml[0] === $fragment;
+export const isNamedNodeMap = jsonml => typeof jsonml === 'object' && jsonml !== null && !Array.isArray(jsonml);
+export const nodeNameOf = jsonml => Array.isArray(jsonml) ? jsonml[0] : $text;
 
 export function nodeValueOf(jsonml) {
 	switch (typeof jsonml) {

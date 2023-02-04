@@ -9,6 +9,7 @@
 	{
 		"imports": {
 			"jsonml": "/path/to/jsonml/index.js"
+			"jsonml/": "/path/to/jsonml/"
 		}
 	}
 </script>
